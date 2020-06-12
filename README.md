@@ -2,7 +2,7 @@
 Personal dwm fork
 
 Applied patches:
-1. [transfer](https://dwm.suckless.org/patches/transfer/)
+1. [transfer](https://dwm.suckless.org/patches/transfer/) (modified to work with pertag patch)
 2. [perseltag](https://dwm.suckless.org/patches/pertag/)
 3. [attachbottom](https://dwm.suckless.org/patches/attachbottom/)
 4. [moveresize](https://dwm.suckless.org/patches/moveresize/)
