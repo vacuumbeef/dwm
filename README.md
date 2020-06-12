@@ -6,7 +6,7 @@ Applied patches:
 2. [perseltag](https://dwm.suckless.org/patches/pertag/)
 3. [attachbottom](https://dwm.suckless.org/patches/attachbottom/)
 4. [moveresize](https://dwm.suckless.org/patches/moveresize/)
-5. [stacker](https://dwm.suckless.org/patches/stacker/)
+5. [movestack](https://dwm.suckless.org/patches/movestack/)
 6. [vanitygaps](https://dwm.suckless.org/patches/vanitygaps/)
 7. [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
 8. [sticky](https://dwm.suckless.org/patches/sticky/)
