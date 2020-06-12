@@ -61,14 +61,6 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
-#define STACKKEYS(MOD,ACTION) \
-	{ MOD, XK_j,     ACTION##stack, {.i = INC(+1) } }, \
-	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } }, \
-	{ MOD, XK_grave, ACTION##stack, {.i = PREVSEL } }, \
-	{ MOD, XK_q,     ACTION##stack, {.i = 0 } }, \
-	{ MOD, XK_a,     ACTION##stack, {.i = 1 } }, \
-	{ MOD, XK_z,     ACTION##stack, {.i = 2 } }, \
-	{ MOD, XK_x,     ACTION##stack, {.i = -1 } },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -77,13 +69,13 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-/*First arg only serves to match against key in rules*/
 static const char *scratchpadcmd[] = {"s", "st", "-t", "scratchpad", NULL};
 static const char *weechatscratch[] = {"w", "st", "-t", "weepad", "-e", "weechat", NULL};
 static const char *vifmscratch[] = {"v", "st", "-t", "vifmpad", "-e", "vifmrun", NULL};
 static const char *newsboatscratch[] = {"n", "st", "-t", "newsboatpad", "-e", "newsboat", NULL};
 static const char *browserscratch[] = {"b", "qutebrowser", NULL};
 
+#include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -107,12 +99,15 @@ static Key keys[] = {
 	{ 0, XF86XK_AudioForward,	spawn,		SHCMD("mpc seekthrough +15") },
 	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("xbacklight -inc 5") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 5") },
-	STACKKEYS(MODKEY,                          focus)
-	STACKKEYS(MODKEY|ShiftMask,                push)
+	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
+	{ MODKEY,           		XK_g,      togglegaps,     {0} },
 	{ MODKEY,                       XK_x,      transfer,       {0} },
 	{ MODKEY,                       XK_space, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
@@ -121,7 +116,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY|ControlMask,           XK_s,      togglesticky,   {0} },
+	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY|ShiftMask,             XK_j,   moveresize,     {.v = "0x 25y 0w 0h" } },
 	{ MODKEY|ShiftMask,             XK_k,     moveresize,     {.v = "0x -25y 0w 0h" } },
 	{ MODKEY|ShiftMask,             XK_l,  moveresize,     {.v = "25x 0y 0w 0h" } },
@@ -136,7 +131,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY|Mod4Mask,              XK_0,      togglegaps,     {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -147,7 +141,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	/*{ MODKEY,                       XK_space,  setlayout,      {0} },*/
-	/*{ MODKEY|ShiftMask,             XK_BackSpace, quit,        {0} },*/
+	/*{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },*/
 };
 
 /* button definitions */
