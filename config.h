@@ -35,9 +35,11 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        0  },
 	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1,        0  },
 	{ NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
-	{ NULL,       NULL,   "weepad",       0,            0,           -1,       'w' },
+	{ NULL,       NULL,   "weepad",       0,            0,           -1,       'c' },
 	{ NULL,       NULL,   "vifmpad",      0,            0,           -1,       'v' },
 	{ NULL,       NULL,   "newsboatpad",  0,            0,           -1,       'n' },
+	{ NULL,       NULL,   "wikipad",      0,            0,           -1,       'w' },
+	{ NULL,       NULL,   "mixerpad",     0,            0,           -1,       'm' },
 	{ NULL,       NULL,   "qutebrowser",  0,            0,           -1,       'b' },
 };
 
@@ -70,9 +72,11 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *scratchpadcmd[] = {"s", "st", "-t", "scratchpad", NULL};
-static const char *weechatscratch[] = {"w", "st", "-t", "weepad", "-e", "weechat", NULL};
+static const char *wikiscratch[] = {"w", "st", "-t", "wikipad", "-e", "wiki_open", NULL};
+static const char *weechatscratch[] = {"c", "st", "-t", "weepad", "-e", "weechat", NULL};
 static const char *vifmscratch[] = {"v", "st", "-t", "vifmpad", "-e", "vifmrun", NULL};
 static const char *newsboatscratch[] = {"n", "st", "-t", "newsboatpad", "-e", "newsboat", NULL};
+static const char *mixerscratch[] = {"m", "st", "-t", "mixerpad", "-e", "pulsemixer", NULL};
 static const char *browserscratch[] = {"b", "qutebrowser", NULL};
 
 #include "movestack.c"
@@ -83,6 +87,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_s,      spawn,          SHCMD("dzenstatus") },
 	{ ALTKEY,                       XK_Return, spawn,          SHCMD("st") },
 	{ MODKEY,                       XK_Return, spawn,          SHCMD("st") },
+	{ ALTKEY|ShiftMask,             XK_F5, 	   spawn,          SHCMD("keepmenu") },
 	{ 0, 	          XF86XK_AudioRaiseVolume, spawn,	   SHCMD("dzen_volume -i 5") },
 	{ 0, 	          XF86XK_AudioLowerVolume, spawn,	   SHCMD("dzen_volume -d 5") },
 	{ 0, 	                 XF86XK_AudioPrev, spawn,	   SHCMD("mpc prev") },
@@ -90,18 +95,25 @@ static Key keys[] = {
 	{ 0, 	                XF86XK_AudioPause, spawn,	   SHCMD("mpc pause") },
 	{ 0, 	                 XF86XK_AudioPlay, spawn,	   SHCMD("mpc toggle") },
 	{ 0, 	                 XF86XK_AudioStop, spawn,	   SHCMD("mpc stop") },
-	{ 0, 	               XF86XK_AudioRewind, spawn,	   SHCMD("mpc seekthrough -15") },
-	{ 0, 	              XF86XK_AudioForward, spawn,	   SHCMD("mpc seekthrough +15") },
+	{ ShiftMask, 	         XF86XK_AudioNext, spawn,	   SHCMD("mpc seekthrough +15") },
+	{ ShiftMask, 	         XF86XK_AudioPrev, spawn,	   SHCMD("mpc seekthrough -15") },
 	{ 0, 	           XF86XK_MonBrightnessUp, spawn,	   SHCMD("xbacklight -inc 5") },
 	{ 0, 	         XF86XK_MonBrightnessDown, spawn,	   SHCMD("xbacklight -dec 5") },
+	{ MODKEY|ControlMask,           XK_l,      spawn,          SHCMD("betterlockscreen -l") },
+	{ 0,           			XK_Print,  spawn,          SHCMD("scrfull") },
+	{ ControlMask,           	XK_Print,  spawn,          SHCMD("scrpart") },
+	{ ControlMask|ShiftMask,        XK_Print,  spawn,          SHCMD("gifrecord") },
+	{ ControlMask,        		XK_End,    spawn,          SHCMD("pkill -f 'x11grab'") },
 	/* Scratchpads */
 	/* modifier                     key        function        argument */
 	{ ALTKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
+	{ ALTKEY,                       XK_F1,     togglescratch,  {.v = wikiscratch } },
 	{ ALTKEY,                       XK_w,      togglescratch,  {.v = weechatscratch } },
 	{ ALTKEY,                       XK_f,      togglescratch,  {.v = vifmscratch } },
 	{ ALTKEY,                       XK_n,      togglescratch,  {.v = newsboatscratch } },
+	{ ALTKEY,                       XK_F10,    togglescratch,  {.v = mixerscratch } },
 	{ ALTKEY,                       XK_b,      togglescratch,  {.v = browserscratch } },
-	/* Windows controls */
+	/* Windows */
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
@@ -129,7 +141,7 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,              XK_k,      moveresize,     {.v = "0x 0y 0w -25h" } },
 	{ MODKEY|Mod1Mask,              XK_l,      moveresize,     {.v = "0x 0y 25w 0h" } },
 	{ MODKEY|Mod1Mask,              XK_h,      moveresize,     {.v = "0x 0y -25w 0h" } },
-	/* Tags controls */
+	/* Tags */
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
