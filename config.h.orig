@@ -31,21 +31,19 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor    float x,y,w,h    floatborderpx   scratch key*/
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        50,50,500,500,   1,              0  },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1,        50,50,500,500,   1,              0  },
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        50,50,500,500,   1,              0  },
-	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1,        50,50,500,500,   1,              0  },
-	{ "reaper",   NULL,       NULL,       1 << 7,       0,           -1,        50,50,500,500,   1,              0  },
-	{ "QjackCtl", NULL,       NULL,       0,       	    1,           -1,        50,50,500,500,   1,              0  },
-	{ NULL,       NULL,   "scratchpad",   0,            1,           -1,        50,50,500,500,   1,             's' },
-	{ NULL,       NULL,   "weepad",       0,            1,           -1,        15,15,320,450,   1,             'c' },
-	{ NULL,       NULL,   "vifmpad",      0,            0,           -1,        50,50,500,500,   1,             'v' },
-	{ NULL,       NULL,   "newsboatpad",  0,            0,           -1,        50,50,500,500,   1,             'n' },
-	{ NULL,       NULL,   "wikipad",      0,            0,           -1,        50,50,500,500,   1,             'w' },
-	{ NULL,       NULL,   "mixerpad",     0,            0,           -1,        50,50,500,500,   1,             'm' },
-	{ NULL,       NULL,   "mailpad",      0,            0,           -1,        50,50,500,500,   1,             'k' },
-	{ NULL,       NULL,   "qutebrowser",  0,            0,           -1,        50,50,500,500,   1,             'b' },
+	/* class      instance    title       tags mask     isfloating   monitor    scratch key */
+	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        0  },
+	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1,        0  },
+	{ "reaper",   NULL,       NULL,       1 << 7,       0,           -1,        0  },
+	{ "QjackCtl", NULL,       NULL,       0,       	    1,           -1,        0  },
+	{ NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
+	{ NULL,       NULL,   "weepad",       0,            1,           -1,       'c' },
+	{ NULL,       NULL,   "vifmpad",      0,            0,           -1,       'v' },
+	{ NULL,       NULL,   "newsboatpad",  0,            0,           -1,       'n' },
+	{ NULL,       NULL,   "wikipad",      0,            0,           -1,       'w' },
+	{ NULL,       NULL,   "mixerpad",     0,            0,           -1,       'm' },
+	{ NULL,       NULL,   "mailpad",      0,            0,           -1,       'k' },
+	{ NULL,       NULL,   "qutebrowser",  0,            0,           -1,       'b' },
 };
 
 /* layout(s) */
