@@ -12,3 +12,4 @@ Applied patches:
 8. [sticky](https://dwm.suckless.org/patches/sticky/)
 9. [dwmc](https://dwm.suckless.org/patches/dwmc/)
 10. [namedscratchpads](https://dwm.suckless.org/patches/namedscratchpads/)
+11. [floatrules](https://dwm.suckless.org/patches/floatrules/)
