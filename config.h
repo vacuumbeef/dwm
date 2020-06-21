@@ -3,6 +3,9 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 8;       /* snap pixel */
+static const char *tagfile          = "/tmp/dwm_tags";
+static const int barheight          = 25;        /* 0 means bottom bar */
+static const char *sepchar          = ":";
 static const unsigned int gappih    = 5;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 5;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
@@ -31,21 +34,20 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor    float x,y,w,h    floatborderpx   scratch key*/
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        50,50,500,500,   1,              0  },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1,        50,50,500,500,   1,              0  },
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        50,50,500,500,   1,              0  },
-	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1,        50,50,500,500,   1,              0  },
-	{ "reaper",   NULL,       NULL,       1 << 7,       0,           -1,        50,50,500,500,   1,              0  },
-	{ "QjackCtl", NULL,       NULL,       0,       	    1,           -1,        50,50,500,500,   1,              0  },
-	{ NULL,       NULL,   "scratchpad",   0,            1,           -1,        50,50,500,500,   1,             's' },
-	{ NULL,       NULL,   "weepad",       0,            1,           -1,        15,15,320,450,   1,             'c' },
-	{ NULL,       NULL,   "vifmpad",      0,            0,           -1,        50,50,500,500,   1,             'v' },
-	{ NULL,       NULL,   "newsboatpad",  0,            0,           -1,        50,50,500,500,   1,             'n' },
-	{ NULL,       NULL,   "wikipad",      0,            0,           -1,        50,50,500,500,   1,             'w' },
-	{ NULL,       NULL,   "mixerpad",     0,            0,           -1,        50,50,500,500,   1,             'm' },
-	{ NULL,       NULL,   "mailpad",      0,            0,           -1,        50,50,500,500,   1,             'k' },
-	{ NULL,       NULL,   "qutebrowser",  0,            0,           -1,        50,50,500,500,   1,             'b' },
+	/* class          instance    title       tags mask     isfloating   monitor    float x,y,w,h         floatborderpx   scratch key*/
+	{ "Gimp",         NULL,       NULL,       0,            0,           -1,        50,50,500,500,        1,              0  },
+	{ "Firefox",      NULL,       NULL,       1 << 8,       0,           -1,        50,50,500,500,        1,              0  },
+	{ "reaper",       NULL,       NULL,       1 << 7,       0,           -1,        50,50,500,500,        1,              0  },
+	{ "QjackCtl",     NULL,       NULL,       0,       	1,           -1,        889,651,460,100,      1,             'j'  },
+	{ "PatchMatrix",  NULL,       NULL,       0,       	1,           -1,        42,15,1280,500,       1,             'p'  },
+	{ NULL,           NULL,   "scratchpad",   0,            1,           -1,        50,50,500,500,        1,             's' },
+	{ NULL,           NULL,   "weepad",       0,            1,           -1,        15,15,330,420,        1,             'c' },
+	{ NULL,           NULL,   "vifmpad",      0,            0,           -1,        50,50,500,500,        1,             'v' },
+	{ NULL,           NULL,   "newsboatpad",  0,            0,           -1,        50,50,500,500,        1,             'n' },
+	{ NULL,           NULL,   "wikipad",      0,            0,           -1,        50,50,500,500,        1,             'w' },
+	{ NULL,           NULL,   "mixerpad",     0,            0,           -1,        50,50,500,500,        1,             'm' },
+	{ NULL,           NULL,   "mailpad",      0,            0,           -1,        50,50,500,500,        1,             'k' },
+	{ NULL,           NULL,   "qutebrowser",  0,            0,           -1,        50,50,500,500,        1,             'b' },
 };
 
 /* layout(s) */
@@ -84,6 +86,8 @@ static const char *newsboatscratch[] = {"n", "st", "-t", "newsboatpad", "-e", "n
 static const char *mixerscratch[] = {"m", "st", "-t", "mixerpad", "-e", "pulsemixer", NULL};
 static const char *mailscratch[] = {"k", "st", "-t", "mailpad", "-e", "neomutt", NULL};
 static const char *browserscratch[] = {"b", "qutebrowser", NULL};
+static const char *qjackscratch[] = {"j", "qjackctl", NULL};
+static const char *patchmatscratch[] = {"p", "patchmatrix", NULL};
 
 #include "movestack.c"
 static Key keys[] = {
@@ -120,6 +124,8 @@ static Key keys[] = {
 	{ ALTKEY,                       XK_F10,    togglescratch,  {.v = mixerscratch } },
 	{ ALTKEY,                       XK_b,      togglescratch,  {.v = browserscratch } },
 	{ ALTKEY,                       XK_m,      togglescratch,  {.v = mailscratch } },
+	{ ALTKEY,                       XK_F5,     togglescratch,  {.v = qjackscratch } },
+	{ ALTKEY,                       XK_F6,     togglescratch,  {.v = patchmatscratch } },
 	/* Windows */
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -137,6 +143,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_space,  zoom,           {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY|ControlMask,           XK_s,      togglesticky,   {0} },
+	{ 0, 		                XK_F11,    togglefullscr,  {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
