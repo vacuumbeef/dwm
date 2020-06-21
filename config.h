@@ -4,7 +4,7 @@
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 8;       /* snap pixel */
 static const char *tagfile          = "/tmp/dwm_tags";
-static const int barheight          = 25;        /* 0 means bottom bar */
+static const int barheight          = 0;        /* 0 means bottom bar */
 static const char *sepchar          = ":";
 static const unsigned int gappih    = 5;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 5;       /* vert inner gap between windows */
@@ -53,7 +53,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
