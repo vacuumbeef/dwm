@@ -1,0 +1,2 @@
+#!/bin/bash
+st -i -g 50x28-15+15 -c newsscratch -e tmux new-session -A -D -s newsboat newsboat

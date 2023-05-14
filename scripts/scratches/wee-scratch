@@ -1,0 +1,2 @@
+#!/bin/bash
+st -c weescratch -e tmux new-session -A -D -s gomuks gomuks

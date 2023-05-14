@@ -1,0 +1,5 @@
+#!/bin/bash
+pidfile=/tmp/bar_pidfile
+sleep 3
+for i in $(ps aux | grep dwm_bar | grep zsh | awk '{ print $2 }'); do kill $i; done
+rm $pidfile

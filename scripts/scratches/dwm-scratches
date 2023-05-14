@@ -1,0 +1,137 @@
+#!/bin/bash
+# The first argument is the WM_CLASS of a window
+# xprop(1): WM_CLASS(STRING) = instance, class
+# The second argument is the number of the tag on which this window will hide. The number is not 1,2,3,4,5... Tags numbers can be seen with 'dwm-msg get_tags' command
+# Third argument is a command to run a program if its window does not exist
+#
+classname="$1"
+commandtorun="$2"
+wid=$(xdotool search --class "$classname" | head -1)
+hexwid=$(printf "0x%x" $wid)
+
+
+echo $hexwid
+
+#mapw -t $hexwid
+
+
+activetag=$(dwm-msg get_monitors | sed -n '/current/{s/[^0-9]*\([0-9]*\).*/\1/p;q;}')
+windowtag=$(dwm-msg get_dwm_client $wid | sed -n 's/.*"tags": \([0-9]*\),.*/\1/p')
+echo $windowtag
+
+
+
+echo $wid
+echo $activetag
+echo $windowtag
+
+
+
+
+
+
+
+windowid=$(xdotool search --class "$1" 2>/dev/null)
+
+if [ -z "$windowid" ]; then
+	echo DOES NOT EXIST
+$2 &
+else
+	echo EXISTS
+    if [[ $activetag = $windowtag ]]; then
+	    echo EQUAL
+	case $activetag in
+		1|2|4|8|16|32|64|128|256) mapw -t $hexwid ;;
+		*) exit ;;
+	esac
+    else
+	    echo NOT EQUAL
+	if wmctrl -l -x | grep -q "$1"; then
+		echo YOOOOOOOOOOOOOO
+	    mapw -t $hexwid
+	    mapw -t $hexwid
+    	else
+	    echo YAAAAAAAAAAAAa
+	    mapw -t $hexwid
+	fi
+    fi
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#activetag=$(dwm-msg get_monitors | sed -n '/current/{s/[^0-9]*\([0-9]*\).*/\1/p;q;}')
+#windowid=$(xdotool search --class "$1" 2>/dev/null)
+#
+#if [ -z "$windowid" ]; then
+#	case $activetag in
+#		1|2|4|8|16|32|64|128|256)
+#			echo EQUAL-NOTEXIST
+#			$3 &
+#			dwm-msg run_command toggleview $2 >/dev/null
+#			xdotool windowactivate "$windowid" ;;
+#		*)
+#			echo NOTEQUAL-NOTEXIST
+#			$3 & ;;
+#	esac
+#else
+#	case $activetag in
+#		1|2|4|8|16|32|64|128|256)
+#			echo EQUAL-EXIST
+#			dwm-msg run_command toggleview $2 >/dev/null
+#			xdotool windowactivate "$windowid" ;;
+#		*)
+#			echo NOTEQUAL-EXIST
+#			dwm-msg run_command toggleview $2 >/dev/null ;;
+#	esac
+#fi
+#
+#activetag=$(dwm-msg get_monitors | sed -n '/current/{s/[^0-9]*\([0-9]*\).*/\1/p;q;}')
+#windowid=$(xdotool search --class "$1" 2>/dev/null)
+#
+#if [ -z "$windowid" ]; then
+#    if [[ $activetag =~ ^(1|2|4|8|16|32|64|128|256)$ ]]; then
+#        $3 &
+#        dwm-msg run_command toggleview $2 >/dev/null
+#        windowid=$(xdotool search --class "$1" 2>/dev/null)
+#        xdotool windowactivate "$windowid"
+#    else
+#        $3 &
+#    fi
+#else
+#    if [[ $activetag =~ ^(1|2|4|8|16|32|64|128|256)$ ]]; then
+#        dwm-msg run_command toggleview $2 >/dev/null
+#        xdotool windowactivate "$windowid"
+#    else
+#        dwm-msg run_command toggleview $2 >/dev/null
+#    fi
+#fi

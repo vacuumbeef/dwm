@@ -1,0 +1,23 @@
+#!/bin/bash
+case $1 in
+	tiling)
+		layout="\[\]=" ;;
+	monocle)
+		layout="\[M\]" ;;
+	deck)
+		layout="H\[\]" ;;
+	bstack)
+		layout="TTT" ;;
+	bstackhoriz)
+		layout="===" ;;
+	centeredmaster)
+		layout="|M|" ;;
+	centeredfloatingmaster)
+		layout=">M>" ;;
+	floating)
+		layout="><>" ;;
+esac
+
+layout_address=$(dwm-msg get_layouts | sed -n "/$layout/{n;s/[^0-9]*\([0-9]\+\).*/\1/p;}")
+
+dwm-msg run_command setlayoutsafe $layout_address
