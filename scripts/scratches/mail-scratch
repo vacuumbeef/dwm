@@ -1,2 +1,0 @@
-#!/bin/bash
-st -c mailscratch -e tmux new-session -A -D -s aerc aerc
